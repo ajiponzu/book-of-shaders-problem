@@ -14,19 +14,49 @@ vec3 palette3 = vec3(1.0, 1.0, 1.0);
 
 //the book of shaders shape_2
 //円を描画する関数
-vec3 set_circle(vec3 rgb, float stretch, vec2 center, vec2 st)
+vec3 set_circle(vec3 rgb, float rad, vec2 center, vec2 st)
 {
+  //円
   float pct = distance(st, center);
-  pct = 1.0 - smoothstep(0.399 + stretch, 0.401 + stretch, pct);
+
+  //楕円, おそらく重心が二つあるから
+  //ちなみに，完璧な楕円を描くには，smoothstepに指定する境界値の大きい方を, 重心間距離分だけ足しこむ必要がある．
+//  pct = distance(st,vec2(center)) + distance(st,vec2(center + 0.2));
+
+  //無駄にでかくなる．
+//  pct = distance(st,vec2(center)) * distance(st,vec2(center));
+
+  //円を二個描画できる, 二点のうち，距離の小さい方の点を中心とする．
+//  pct = min(distance(st,vec2(center)),distance(st,vec2(center + 0.2)));
+
+  //フットボール型の図形を描画, 二つの点を結ぶ線分の垂直二等分線を基準に，円弧をそれぞれ描く
+  //距離が大きい方の円弧を採用するので，フットボール型になる．
+//  pct = max(distance(st,vec2(center)),distance(st,vec2(center + 0.2)));
+
+  //pow(x, n)はxのn乗を計算し，x=distance(st, a)を指定した場合，aを基準とした距離が拡大・縮小される
+  //nもdistanceの場合，位置によって拡大率を変えることができる．
+  //なお，distanceは0.0~1.0なので，nが大きくなるほどpowは小さくなる = 円内の領域が拡大される
+//  pct = pow(distance(st,vec2(center)),distance(st,center + 2.0));
+
+  //当然，距離が大きくなると，円内の領域は小さくなるので，想定より小さい円が描画される
+//  pct = distance(st, center);
+
+  //最終的に背景と図形を塗分ける．円を描くことを想定しているので，閾値は半径
+  //smoothstep(~, ~, pct)だと背景色が白，円内が黒になる． 円の内部(中心距離 <= 半径), そこで，1.0から引いている.
+  //また，smoothstepによって枠をきれいにしている．radは半径
+  pct = 1.0 - smoothstep(rad - 0.01, rad + 0.01, pct);
   return pct * rgb;
 }
 
 void main(void)
 {
   vec2 st = gl_FragCoord.xy / resolution.xy;
-  float stretch = 0.1 * abs(sin(time * 4.0));
-  float stretch2 = 0.1 * abs(cos(time * 8.0));
-  vec3 color = set_circle(palette2, stretch, vec2(1.0), st)
-            + set_circle(palette1, stretch2, vec2(0.5 + sin(time)), st);
+
+  //二つの円を振幅させ，かつ移動アニメーションも行う
+  float rad = 0.1 + 0.1 * abs(sin(time * 4.0));
+  float rad2 = 0.1 + 0.1 * abs(cos(time * 8.0));
+  vec3 color = set_circle(palette2, rad, vec2(0.7), st)
+            + set_circle(palette1, rad2, vec2(0.5 + sin(time)), st);
+
   gl_FragColor = vec4(color, 1.0);
 }
