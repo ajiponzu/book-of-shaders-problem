@@ -13,7 +13,7 @@ float rand(vec2 p) {
 
 //描きたいグラフの関数を，0=~の形に式変形してやる．この式の右辺を
 //pに代入する．smoothstepの二つの閾値の幅が狭いほど細い線を描くことができる．
-float plot(float p) {    
+float plot(float p) {
   return smoothstep(.03 , .0, abs(p));
 }
 
@@ -28,7 +28,7 @@ void main(){
 
   //三角関数と極座標の組み合わせにより，角度に応じて塗りつぶす範囲を変化させる
   float rad = cos((theta * 3.));
-    
+
   //距離が負になる場合, 0として扱うが，大きさは0ではない．よって絶対値を使用することで，塗りつぶす範囲を拡大
   rad = abs(cos(theta * 2.));
   //桜の花
@@ -44,7 +44,7 @@ void main(){
   //通常図形, ちなみにstepと異なり，smoothstepは閾値を二つ設定できるので，
   //本来，smoothstep(a, b, r)の場合，a < bだが，a > bとすることで，結果を反転することができる．
 //  color = vec3(smoothstep(rad+.02, rad, r));
-  
+
   //型抜き図形，上の形から縮小図形型に型抜く
   color = vec3(smoothstep(rad+.02, rad, r) * smoothstep(rad-.2, rad, r));
 //  color = vec3((1.-smoothstep(rad,rad+.02,r)) * smoothstep(rad - .1, rad, r));
@@ -53,7 +53,7 @@ void main(){
   //枠線外の場合，plotによって0が帰ってくるので，枠線のみ残すようにくり抜く．
   color = vec3(smoothstep(rad+.02, rad, r) * plot(rad - r));
   gl_FragColor = vec4(color, 1.);
-  
+
   //smoothstepによって輪郭がぼやける．
   //ぼやける範囲をcos, tanとtimeによってコントロールすることで，明滅アニメーションを実装
 //  color = vec3(smoothstep(rad+cos(tan(time)), rad,r) * smoothstep(rad-.2, rad, r));
