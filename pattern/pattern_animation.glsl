@@ -121,12 +121,9 @@ void main()
 
   //格子形成
   vec3 color = vec3(pattern(st, gridSize), .0);
-  float i;
-  for (i = .0; i < 4.; i += 2.)
-    color += noSign(color.xy, st * 3., vec2(floor(i + cos(time)), 2.));
+    color += noSign(color.xy, st * 3., vec2(floor(cos(time)), 2.));
 
-  for (i = .0; i < 3.; i++)
-    color += okSign(color.xy, st * 3., vec2(floor(i + tan(time)), 1.));
+    color += okSign(color.xy, st * 3., vec2(floor(tan(time)), 1.));
 
   //図形ベクトルを加算していくことで図形を同時に表示
   color += switchTwoSign(abs(cos(time * .4)), color.xy, st * 3., vec2(1., .0));

@@ -2,9 +2,9 @@
 precision highp float;
 #endif
 
-uniform vec2 u_resolution;
-uniform vec2 u_mouse;
-uniform float u_time;
+uniform vec2 resolution;
+uniform vec2 mouse;
+uniform float time;
 
 //長方形を描画，xとyのサイズを調整することで，形状だけでなく横転，直立させることができる
 //bar.glslのset_barとやっていることは同じ，vec2を用いているのでコード量を削減できる
@@ -34,7 +34,7 @@ float cross(in vec2 _st, float _size){
 }
 
 void main(){
-  vec2 st = gl_FragCoord.xy/u_resolution.xy;
+  vec2 st = gl_FragCoord.xy / resolution.xy;
   vec3 color = vec3(.0);
 
   // To move the cross we move the space
@@ -42,10 +42,10 @@ void main(){
   //等速円運動の速度の公式．
   //振り子において，y方向はx方向の半分の値域なのでabsを使用
   //あくまで平行移動の変化量としての速度であることに注意
-  vec2 translate = vec2(cos(u_time), abs(sin(u_time)));
+  vec2 translate = vec2(cos(time), abs(sin(time)));
 
   //蛇行運動，xとyに速度差をつければよい
-  translate = vec2(cos(u_time * 2.), sin(u_time * .25));
+  translate = vec2(cos(time * 2.), sin(time * .25));
 
 
   //平行移動
