@@ -20,7 +20,7 @@ float box(in vec2 _st, in vec2 _size){
   uv *= smoothstep(_size,
                     _size+vec2(.001),
                     vec2(1.)-_st);
-                    
+
   return uv.x*uv.y;
 }
 
@@ -43,11 +43,11 @@ void main(){
   //振り子において，y方向はx方向の半分の値域なのでabsを使用
   //あくまで平行移動の変化量としての速度であることに注意
   vec2 translate = vec2(cos(u_time), abs(sin(u_time)));
-  
+
   //蛇行運動，xとyに速度差をつければよい
   translate = vec2(cos(u_time * 2.), sin(u_time * .25));
 
-  
+
   //平行移動
   st += translate * .5;
 
