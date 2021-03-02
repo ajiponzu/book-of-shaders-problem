@@ -4,9 +4,9 @@ precision highp float;
 
 #define PI 3.14159265359
 
-uniform vec2 u_resolution;
-uniform vec2 u_mouse;
-uniform float u_time;
+uniform vec2 resolution;
+uniform vec2 mouse;
+uniform float time;
 
 //拡大・縮小行列を返す
 mat2 Scale(vec2 _scale)
@@ -84,7 +84,7 @@ const vec3 black = vec3(.0, .0, .0);
 
 void main()
 {
-  vec2 st = gl_FragCoord.xy/u_resolution.xy;
+  vec2 st = gl_FragCoord.xy / resolution.xy;
   vec3 color = vec3(.0, .0, .0);
 
   vec3 baseColor = black;

@@ -4,9 +4,9 @@ precision highp float;
 
 #define PI 3.14159265359
 
-uniform vec2 u_resolution;
-uniform vec2 u_mouse;
-uniform float u_time;
+uniform vec2 resolution;
+uniform vec2 mouse;
+uniform float time;
 
 //拡大・縮小行列を返す
 mat2 scale(vec2 _scale)
@@ -36,7 +36,7 @@ float box(in vec2 _st, in vec2 _size)
   uv *= smoothstep(_size,
                     _size+vec2(.001),
                     vec2(1.)-_st);
-                    
+
   return uv.x*uv.y;
 }
 
@@ -77,7 +77,7 @@ vec3 noSign(in vec2 _grid, in vec2 _st, in vec2 _gridPos)
   vec3 no = vec3(cross(rotate2d(PI/4.) * (_grid - .5) + .5, .5));
   //stepによって，描く格子を指定
   return no * step(_gridPos.x, _st.x) * step(_gridPos.y, _st.y)
-            * (1. - step(_gridPos.x + 1., _st.x)) * (1. - step(_gridPos.y + 1., _st.y)); 
+            * (1. - step(_gridPos.x + 1., _st.x)) * (1. - step(_gridPos.y + 1., _st.y));
 }
 
 //〇マークを格子の好きな位置の中心に描画する(ある意味変換関数)
@@ -92,7 +92,7 @@ vec3 okSign(in vec2 _grid, in vec2 _st, in vec2 _gridPos)
   vec3 ok = vec3(circle(_grid, .3)) * (1. - vec3(circle(_grid, .2)));
   //stepによって，描く格子を指定
   return ok * step(_gridPos.x, _st.x) * step(_gridPos.y, _st.y)
-            * (1. - step(_gridPos.x + 1., _st.x)) * (1. - step(_gridPos.y + 1., _st.y)); 
+            * (1. - step(_gridPos.x + 1., _st.x)) * (1. - step(_gridPos.y + 1., _st.y));
 }
 
 //〇×入れ替え
@@ -108,29 +108,29 @@ vec3 switchTwoSign(in float cycle, in vec2 _grid, in vec2 _st, in vec2 _gridPos)
 
 void main()
 {
-  vec2 st = gl_FragCoord.xy/u_resolution.xy;
+  vec2 st = gl_FragCoord.xy / resolution.xy;
 
   //格子数
   float gridSize = 3.;
-  
+
   //背景のみ回転
   vec2 back = pattern(st, gridSize);
   back -= .5;
-  back = rotate2d(cos(u_time)) * back;
+  back = rotate2d(cos(time)) * back;
   back += .5;
 
   //格子形成
   vec3 color = vec3(pattern(st, gridSize), .0);
   float i;
   for (i = .0; i < 4.; i += 2.)
-    color += noSign(color.xy, st * 3., vec2(floor(i + cos(u_time)), 2.));
+    color += noSign(color.xy, st * 3., vec2(floor(i + cos(time)), 2.));
 
   for (i = .0; i < 3.; i++)
-    color += okSign(color.xy, st * 3., vec2(floor(i + tan(u_time)), 1.));
-  
+    color += okSign(color.xy, st * 3., vec2(floor(i + tan(time)), 1.));
+
   //図形ベクトルを加算していくことで図形を同時に表示
-  color += switchTwoSign(abs(cos(u_time * .4)), color.xy, st * 3., vec2(1., .0));
-  
+  color += switchTwoSign(abs(cos(time * .4)), color.xy, st * 3., vec2(1., .0));
+
   //背景と前景(図形)をマージ
   color.xy += back;
 
