@@ -68,7 +68,7 @@ vec3 MakeLayerType2(in vec3 _color, in vec2 _baseBox, in float _gridSize)
   for (i = 0.; i < 2.; i += 1.)
   {
     layer += Draw(_color, _baseBox, _gridSize, vec2(i, 2.));
-    layer += Draw(_color, _baseBox, _gridSize, vec2(i+1, 0.));
+    layer += Draw(_color, _baseBox, _gridSize, vec2(i+1., 0.));
   }
 
   for (i = 0.; i < 3.; i += 2.)
@@ -85,7 +85,7 @@ vec3 MakeLayerType3(in vec3 _color, in vec2 _baseBox, in float _gridSize)
   for (i = 0.; i < 2.; i += 1.)
   {
     layer += Draw(_color, _baseBox, _gridSize, vec2(i, i));
-    layer += Draw(_color, _baseBox, _gridSize, vec2(i+1, i));
+    layer += Draw(_color, _baseBox, _gridSize, vec2(i+1., i));
   }
   return layer;
 }
@@ -108,7 +108,7 @@ vec3 MakeLayerType5(in vec3 _color, in vec2 _baseBox, in float _gridSize)
   float i;
   for (i = 0.; i < 2.; i += 1.)
     layer += Draw(_color, _baseBox, _gridSize, vec2(i, 2.));
-  for (i = 1.; i < 3; i += 1.)
+  for (i = 1.; i < 3.; i += 1.)
     layer += Draw(_color, _baseBox, _gridSize, vec2(i, 1.));
 
   return layer;
@@ -404,7 +404,7 @@ vec3 CreateCanvas(in vec2 _baseBox)
 {
   vec3 canvas = vec3(0.);
   vec2 baseBox = Pattern(_baseBox, 3.);
-
+  
   canvas += Draw(CreateCanvas1(baseBox), _baseBox, 3., vec2(0.));
   canvas += Draw(CreateCanvas2(baseBox), _baseBox, 3., vec2(0., 1.));
   canvas += Draw(CreateCanvas3(baseBox), _baseBox, 3., vec2(0., 2.));
