@@ -65,15 +65,29 @@ void main(void){
   //以下は方向をそれぞれ変える例
   //引くと上にスライド, 足すと下にスライド
   //行スライドとの対応(引くと座標あ値の大きい方へスライド, 足すと小さい方へスライド)
-  st.y -= step(1., mod(st.x * tileSize, 2.)) * u_time;
-  st.y += step(mod(st.x * tileSize, 2.), 1.) * u_time;
+  // st.y -= step(1., mod(st.x * tileSize, 2.)) * u_time;
+  // st.y += step(mod(st.x * tileSize, 2.), 1.) * u_time;
 
   //y方向にずれたレンガ模様を作る
-  vec2 _st = BrickTileY(st, tileSize);
+  // vec2 _st = BrickTileY(st, tileSize);
 
   //パターンごとの模様を決定する
 //  color = vec3(box(_st,vec2(.9)));
-  color = vec3(circle(_st, .25));
+  // color = vec3(circle(_st, .25));
+
+  //パターンをさらにパターン化
+  st.y -= step(1., mod(st.x * tileSize, 2.)) * u_time;
+  st.y += step(mod(st.x * tileSize, 2.), 1.) * u_time;
+  vec2 _st1 = BrickTileY(st, tileSize);
+
+  _st1.x -= step(1., mod(_st1.y * tileSize, 2.)) * u_time;
+  _st1.x += step(mod(_st1.y * tileSize, 2.), 1.) * u_time;
+
+  vec2 _st2 = brickTile(_st1, tileSize);
+
+  //パターンごとの模様を決定する
+//  color = vec3(box(_st,vec2(.9)));
+  color = vec3(circle(_st2, .25));
 
   //レンガ模様
 //  color = vec3(st,0.0);
